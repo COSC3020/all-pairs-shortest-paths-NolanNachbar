@@ -1,28 +1,43 @@
 const fs = require('fs');
-const assert = require('assert');
-
+const jsc = require('jsverify');
 eval(fs.readFileSync('code.js')+'');
 
-dm = [[]];
-assert(tsp_hk(dm) == 0);
+const graph1 = [
+    [0, 3, 2, 7],
+    [3, 0, 6, Infinity],
+    [2, 6, 0, 3], 
+    [7, Infinity, 3, 0], 
+];
 
-dm = [[0]];
-assert(tsp_hk(dm) == 0);
+const graph2 = [
+    [0, 3, 7, Infinity],
+    [3, 0, Infinity, 2], 
+    [7, Infinity, 0, 1],
+    [Infinity, 2, 1, 0],
+];
 
-dm = [[0,0,0],
-      [0,0,0],
-      [0,0,0]];
-assert(tsp_hk(dm) == 0);
+const graph3 = [
+    [0, 1, Infinity, Infinity],
+    [1, 0, 5, 12],
+    [Infinity, 5, 0, 1],
+    [Infinity, 12, 1, 0],
+];
 
-dm = [[0,1,2],
-      [1,0,2],
-      [2,2,0]];
-assert(tsp_hk(dm) == 3);
+function arraysEqual(arr1, arr2) {
+    return JSON.stringify(arr1) === JSON.stringify(arr2);
+}
 
-// https://people.sc.fsu.edu/~jburkardt/datasets/tsp/tsp.html
-dm = [[0,3,4,2,7],
-      [3,0,4,6,3],
-      [4,4,0,5,8],
-      [2,6,5,0,6],
-      [7,3,8,6,0]];
-assert(tsp_hk(dm) == 13);
+const tests = [
+    { func: allPairsShortestPaths, graph: graph1, result: [[0,3,2,5],[3,0,5,8],[2,5,0,3],[5,8,3,0]], name: "allPairsShortestPaths's Test 1" },
+    { func: allPairsShortestPaths, graph: graph2, result: [[0,3,6,5],[3,0,3,2],[6,3,0,1],[5,2,1,0]], name: "allPairsShortestPaths's Test 2" },
+    { func: allPairsShortestPaths, graph: graph3, result: [[0,1,6,7],[1,0,5,6],[6,5,0,1],[7,6,1,0]], name: "allPairsShortestPaths's Test 3" },
+];
+
+tests.forEach(test => {
+    const output = test.func(test.graph, sourceNode);
+    if (arraysEqual(output, test.result)) {
+        console.log(${test.name} successful);
+    } else {
+        console.error(${test.name} failed: ${output} != ${test.result});
+    }
+});
