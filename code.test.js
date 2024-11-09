@@ -36,8 +36,8 @@ const tests = [
 tests.forEach(test => {
     const output = test.func(test.graph, sourceNode);
     if (arraysEqual(output, test.result)) {
-        console.log(${test.name} successful);
+        console.log(`${test.name} successful`);
     } else {
-        console.error(${test.name} failed: ${output} != ${test.result});
+        console.error(`${test.name} failed: ${output} != ${test.result}`);
     }
 });
