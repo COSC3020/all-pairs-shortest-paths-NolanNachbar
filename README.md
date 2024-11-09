@@ -28,3 +28,40 @@ the function and run automatically when you commit through a GitHub action.
 
 What is the worst-case time complexity ($\Theta$) of the algorithm? Add your
 answer, including your reasoning, to this markdown file.
+
+Recall my code,
+```js
+function allPairsShortestPaths(graph) {
+  
+  let card = graph.length; 
+  let dist = Array.from({ length: card}, () => Array(card).fill(Infinity));
+  
+  for(let i = 0; i < card; i++) dist[i][i] = 0; // This runs |V| times
+    
+  for(let v = 0; v < card; v++){ // this runs |V| times
+    for(let u = 0; u < card; u++){ // this runs |V| times
+      dist[u][v] = graph[u][v]; // This set of loops is O(|V|^2)
+    }
+  }
+  
+  for(let k = 0; k < card; k++){// this runs |V| times
+    for(let i = 0; i < card; i++){// this runs |V| times
+      for(let j = 0; j < card; j++){// this runs |V| times
+        if (dist[i][j] > dist[i][k] + dist[k][j]) dist[i][j] = dist[i][k] + dist[k][j]; // This set of loops is O(|V|^3)
+      }
+    }
+  }
+return dist;
+}
+```
+
+After looking at the loops, you can see that the double nested loop portion of the code is the most expensive in terms of complexity. Because it's a set of three nested loops that will each run $|V|$ times in any case (including worst case), the complexity is $\Theta(|V|^3)$.
+
+I wrote this using the provided pseudocode directly. I copied my testcode from my dijkstra-s-algorithm and modified it to test this function. 
+https://github.com/COSC3020/dijkstra-s-algorithm-NolanNachbar/blob/NolanNachbar-patch-1/code.test.js
+
+After I wrote my code and the test code, I plugged my test graphs into this function https://github.com/COSC3020/all-pairs-shortest-paths-AaronATM/blob/main/code.js to ensure my expected results were correct. I didn't use it to make or modify any other parts of my code/testcode though.
+
+I certify that I have listed all sources used to complete this exercise, including the use of any Large Language Models. All of the work is my own, except where stated otherwise. I am aware that plagiarism carries severe penalties and that if plagiarism is suspected, charges may be filed against me without prior notice.
+
+
